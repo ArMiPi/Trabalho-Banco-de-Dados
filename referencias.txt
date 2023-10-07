@@ -1,0 +1,2 @@
+PokéAPI - https://pokeapi.co/docs/v2
+PokemonGO API - https://rapidapi.com/Chewett/api/pokemon-go1

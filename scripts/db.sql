@@ -34,7 +34,6 @@ CREATE TABLE pokemon (
 CREATE TABLE ability (
     id_ability INT,
     name VARCHAR(100) NOT NULL,
-    is_hidden SMALLINT DEFAULT 0 NOT NULL,
     CONSTRAINT pk_ability PRIMARY KEY(id_ability),
     CONSTRAINT unique_name_ability UNIQUE(name)
 );
@@ -42,6 +41,7 @@ CREATE TABLE ability (
 CREATE TABLE have_ability (
     id_pokemon INT,
     id_ability INT,
+    is_hidden SMALLINT DEFAULT 0 NOT NULL,
     CONSTRAINT pk_have_ability PRIMARY KEY(id_pokemon, id_ability),
     CONSTRAINT fk_pokemon FOREIGN KEY(id_pokemon)
         REFERENCES pokemon(id_pokedex)
@@ -129,17 +129,28 @@ CREATE TABLE base_stats (
     CONSTRAINT ck_speed CHECK(speed >= 0)
 );
 
+CREATE TABLE class (
+    id_class INT,
+    type VARCHAR(20) NOT NULL,
+    CONSTRAINT pk_class PRIMARY KEY(id_class),
+    CONSTRAINT uq_class_type UNIQUE(type)
+)
+
 CREATE TABLE move (
     id_move INT,
     name VARCHAR(100) NOT NULL,
     accuracy INT,
-    class VARCHAR(100),
+    id_class INT,
     power INT,
     pp INT,
     id_type INT NOT NULL,
     CONSTRAINT pk_id_move PRIMARY KEY(id_move),
     CONSTRAINT fk_type FOREIGN KEY(id_type)
         REFERENCES type(id_type)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_class FOREIGN KEY(id_class)
+        REFERENCES class(id_class)
         ON UPDATE CASCADE
         ON DELETE SET NULL,
     CONSTRAINT ck_accuracy CHECK(accuracy >= 0),

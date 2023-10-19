@@ -13,20 +13,20 @@ VALUES
     (3, 'venusaur', 20, 1000, 45, 'N', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png', 1, 2);
 
 -- Cargas ability
-INSERT INTO ability(id_ability, name, is_hidden)
+INSERT INTO ability(id_ability, name)
 VALUES
-    (65, 'overgrow', 0),
-    (34, 'chlorophyll', 1);
+    (65, 'overgrow'),
+    (34, 'chlorophyll');
 
 -- Cargas have_ability
-INSERT INTO have_ability(id_pokemon, id_ability)
+INSERT INTO have_ability(id_pokemon, id_ability, is_hidden)
 VALUES
-    (1, 65),
-    (2, 65),
-    (3, 65),
-    (1, 34),
-    (2, 34),
-    (3, 34);
+    (1, 65, 0),
+    (2, 65, 0),
+    (3, 65, 0),
+    (1, 34, 1),
+    (2, 34, 1),
+    (3, 34, 1);
 
 -- Cargas pokemon_go
 INSERT INTO pokemon_go(id_pokemon_go, id_pokemon, raid_exclusive, max_cp, buddy_distance, candy_to_evolve)
@@ -63,12 +63,19 @@ VALUES
     (2, 2, 60, 62, 63, 80, 80, 60),
     (3, 3, 80, 82, 83, 100, 100, 80);
 
--- Cargas move
-INSERT INTO move(id_move, name, accuracy, class, power, pp, id_type)
+-- Cargas class
+INSERT INTO class(id_class, type)
 VALUES
-    (13, 'razor-wind', 100, 'special', 80, 10, 1),
-    (15, 'cut', 95, 'physical', 50, 30, 1),
-    (72, 'mega-drain', 100, 'special', 40, 15, 12);
+    (1, 'status'),
+    (2, 'physical'),
+    (3, 'special');
+
+-- Cargas move
+INSERT INTO move(id_move, name, accuracy, id_class, power, pp, id_type)
+VALUES
+    (13, 'razor-wind', 100, 3, 80, 10, 1),
+    (15, 'cut', 95, 2, 50, 30, 1),
+    (72, 'mega-drain', 100, 3, 40, 15, 12);
 
 -- Cargas learn_move
 INSERT INTO learn_move(id_pokemon, id_move)

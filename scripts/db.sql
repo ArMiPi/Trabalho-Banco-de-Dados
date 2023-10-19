@@ -134,7 +134,7 @@ CREATE TABLE class (
     type VARCHAR(20) NOT NULL,
     CONSTRAINT pk_class PRIMARY KEY(id_class),
     CONSTRAINT uq_class_type UNIQUE(type)
-)
+);
 
 CREATE TABLE move (
     id_move INT,

@@ -28,6 +28,12 @@ public class BaseStatsController {
 
                     JSONObject pokemon = APIRequests.getAPIResponse((String) result.get("url"));
 
+                    int pokemon_id = ((Long) pokemon.get("id")).intValue();
+                    JSONObject pokemon_species = APIRequests.getAPIResponse(
+                            String.format("https://pokeapi.co/api/v2/pokemon-species/" + pokemon_id)
+                    );
+                    if(pokemon_species == null) { break; }
+
                     JSONArray stats = (JSONArray) pokemon.get("stats");
 
                     int hp = 0, attack = 0, defense = 0, spAttack = 0, spDefense = 0, speed = 0;
@@ -53,8 +59,8 @@ public class BaseStatsController {
                     }
 
                     baseStatsJdbcDAO.create(new BaseStats(
-                        ((Long) pokemon.get("id")).intValue(),
-                        ((Long) pokemon.get("id")).intValue(),
+                        pokemon_id,
+                        pokemon_id,
                         hp,
                         attack,
                         defense,

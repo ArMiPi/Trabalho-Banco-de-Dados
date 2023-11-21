@@ -3,13 +3,13 @@ package uel.bd.Bulbapedia.models;
 public class Shiny {
     private int id_shiny;
     private int id_pokemon;
-    private boolean egg;
-    private boolean raid;
-    private boolean wild;
+    private int egg;
+    private int raid;
+    private int wild;
     private String sprite;
 
 
-    public Shiny(int id_shiny, int id_pokemon, boolean egg, boolean raid, boolean wild, String sprite) {
+    public Shiny(int id_shiny, int id_pokemon, int egg, int raid, int wild, String sprite) {
         this.id_shiny = id_shiny;
         this.id_pokemon = id_pokemon;
         this.egg = egg;
@@ -34,27 +34,27 @@ public class Shiny {
         this.id_pokemon = id_pokemon;
     }
 
-    public boolean getEgg() {
+    public int getEgg() {
         return egg;
     }
 
-    public void setEgg(boolean egg) {
+    public void setEgg(int egg) {
         this.egg = egg;
     }
 
-    public boolean getRaid() {
+    public int getRaid() {
         return raid;
     }
 
-    public void setRaid(boolean raid) {
+    public void setRaid(int raid) {
         this.raid = raid;
     }
 
-    public boolean getWild() {
+    public int getWild() {
         return wild;
     }
 
-    public void setWild(boolean wild) {
+    public void setWild(int wild) {
         this.wild = wild;
     }
 

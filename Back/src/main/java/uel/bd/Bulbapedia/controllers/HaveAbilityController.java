@@ -35,10 +35,11 @@ public class HaveAbilityController {
                         JSONObject pkmn = (JSONObject) ((JSONObject) pokemon).get("pokemon");
 
                         try {
+                            int is_hidden = (boolean) ((JSONObject) pokemon).get("is_hidden") ? 1 : 0;
                             haveAbilityJdbcDAO.create(new HaveAbility(
                                 APIRequests.getIDFromURL((String) pkmn.get("url")),
                                 id,
-                                (boolean) ((JSONObject) pokemon).get("is_hidden")
+                                is_hidden
                             ));
                         } catch (Exception e) {
                             System.out.println(

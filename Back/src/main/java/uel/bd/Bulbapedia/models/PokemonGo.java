@@ -3,13 +3,21 @@ package uel.bd.Bulbapedia.models;
 public class PokemonGo {
     private int id_pokemon_go;
     private int id_pokemon;
-    private boolean raid_exclusive;
+    private int raid_exclusive;
     private int max_cp;
     private int buddy_distance;
     private int candy_to_evolve;
 
+    public PokemonGo() {
+        this.id_pokemon_go = 0;
+        this.id_pokemon = 0;
+        this.raid_exclusive = 0;
+        this.max_cp = 0;
+        this.buddy_distance = 0;
+        this.candy_to_evolve = 0;
+    }
 
-    public PokemonGo(int id_pokemon_go, int id_pokemon, boolean raid_exclusive, int max_cp, int buddy_distance, int candy_to_evolve) {
+    public PokemonGo(int id_pokemon_go, int id_pokemon, int raid_exclusive, int max_cp, int buddy_distance, int candy_to_evolve) {
         this.id_pokemon_go = id_pokemon_go;
         this.id_pokemon = id_pokemon;
         this.raid_exclusive = raid_exclusive;
@@ -34,11 +42,11 @@ public class PokemonGo {
         this.id_pokemon = id_pokemon;
     }
 
-    public boolean getRaid_exclusive() {
+    public int getRaid_exclusive() {
         return raid_exclusive;
     }
 
-    public void setRaid_exclusive(boolean raid_exclusive) {
+    public void setRaid_exclusive(int raid_exclusive) {
         this.raid_exclusive = raid_exclusive;
     }
 

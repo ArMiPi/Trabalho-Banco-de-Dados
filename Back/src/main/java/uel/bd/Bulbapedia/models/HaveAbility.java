@@ -3,10 +3,10 @@ package uel.bd.Bulbapedia.models;
 public class HaveAbility {
     private int id_pokemon;
     private int id_ability;
-    private boolean is_hidden;
+    private int is_hidden;
 
 
-    public HaveAbility(int id_pokemon, int id_ability, boolean is_hidden) {
+    public HaveAbility(int id_pokemon, int id_ability, int is_hidden) {
         this.id_pokemon = id_pokemon;
         this.id_ability = id_ability;
         this.is_hidden = is_hidden;
@@ -28,11 +28,11 @@ public class HaveAbility {
         this.id_ability = id_ability;
     }
 
-    public boolean getIs_hidden() {
+    public int getIs_hidden() {
         return is_hidden;
     }
 
-    public void setIs_hidden(boolean is_hidden) {
+    public void setIs_hidden(int is_hidden) {
         this.is_hidden = is_hidden;
     }
 }

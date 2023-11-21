@@ -31,7 +31,7 @@ public class MoveController {
                     JSONObject move = APIRequests.getAPIResponse((String) result.get("url"));
 
                     JSONArray learned_by = (JSONArray) move.get("learned_by_pokemon");
-                    if(learned_by.size() == 0) { continue; }
+                    if(learned_by.isEmpty()) { continue; }
 
                     JSONObject move_class = (JSONObject) move.get("damage_class");
                     JSONObject type = (JSONObject) move.get("type");

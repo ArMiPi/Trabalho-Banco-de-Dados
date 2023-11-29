@@ -3,15 +3,16 @@ package uel.bd.Bulbapedia.controllers;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uel.bd.Bulbapedia.DAO.PokemonJdbcDAO;
 import uel.bd.Bulbapedia.models.Pokemon;
 import uel.bd.Bulbapedia.utils.APIRequests;
 
 import java.util.ArrayList;
+import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:3000") //serve para O react se comunicar corretamente com o Spring
 @RestController
 @RequestMapping("/pokemon")
 public class PokemonController {
@@ -87,5 +88,10 @@ public class PokemonController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @GetMapping("/search")
+    public List<Pokemon> getAllPokemon() {
+        return pokemonJdbcDAO.getAll();
     }
 }

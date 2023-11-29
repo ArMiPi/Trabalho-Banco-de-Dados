@@ -11,6 +11,8 @@ public class Pokemon {
     private int idGeneration;
     private Integer evolvesFrom;
 
+    public Pokemon() {
+    }
 
     public Pokemon(
             int idPokedex, String name, int height, int weight, int captureRate, char rarity, String sprite,

@@ -5,27 +5,25 @@ import './SearchBar.css';
 
 export const SearchBar = ({ setResults }) => {
     const [input, setInput] = useState("");
+    let pokeNames = [];
+    fetch("http://localhost:8080/pokemon/search")
+        .then((response) => response.json())
+        .then((json) => {
+            json.forEach((pokemon) => {
+                pokeNames.push({name: pokemon.name.toLowerCase(), id: pokemon.idPokedex});
+            });
+        });
 
-    const fetchData = (value) => {
-      fetch("http://localhost:8080/pokemon/search")
-          .then((response) => response.json())
-          .then((json) =>{
-              const results = json.filter((pokemon) => {
-                  return (
-                      value &&
-                      pokemon &&
-                      pokemon.name &&
-                      pokemon.name.toLowerCase().includes(value)
-                  );
-              });
-              setResults(results);
-          });
-    };
     const handleChange = (value) => {
         setInput(value);
-        fetchData(value);
-    };
-
+        console.log(pokeNames.filter((pokemon) =>
+            pokemon.name.includes(value.toLowerCase())
+        ));
+        const filtered = pokeNames.filter((pokemon) =>
+            pokemon.name.includes(value.toLowerCase())
+        );
+        setResults(filtered);
+    }
     return(
         <div className="input-wrapper">
 
@@ -36,6 +34,4 @@ export const SearchBar = ({ setResults }) => {
             />
         </div>
     );
-
-
 };

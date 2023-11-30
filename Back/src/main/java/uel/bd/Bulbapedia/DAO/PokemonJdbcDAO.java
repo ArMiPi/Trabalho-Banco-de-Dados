@@ -40,10 +40,6 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
             """
                 SELECT * FROM pokemon
             """;
-    private static final String SELECT_NAME_ALL =
-            """
-                SELECT id_pokedex, name FROM pokemon
-            """;
     private static final String UPDATE_QUERY =
             """
                 UPDATE pokemon SET
@@ -89,13 +85,6 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
     public List<Pokemon> getAll() {
         try {
             return template.query(SELECT_QUERY_ALL, BeanPropertyRowMapper.newInstance(Pokemon.class));
-        } catch (DataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-    public List<Pokemon> getAllNames() {
-        try {
-            return template.query(SELECT_NAME_ALL, BeanPropertyRowMapper.newInstance(Pokemon.class));
         } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

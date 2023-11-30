@@ -94,4 +94,9 @@ public class PokemonController {
     public List<Pokemon> getAllPokemon() {
         return pokemonJdbcDAO.getAll();
     }
+
+    @GetMapping("/{id}")
+    public Pokemon getPokemon(@PathVariable int id) {
+        return pokemonJdbcDAO.get(id);
+    }
 }

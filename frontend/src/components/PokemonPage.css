@@ -11,10 +11,63 @@
     height: 100vh;
 }
 table{
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
+    border: black 2px solid;
 }
 td{
     border: 1px solid black;
     padding: 10px;
+    text-align: center;
+}
+.page-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: darkslategray;
+}
+/*make this image appear in the middle of the screen*/
+.pokeImg{
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    /*margin-bottom: 5px;*/
+    border: 1px solid red;
+    background-color: darkslategray;
+}
+
+.table-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 600px;
+    align-content: flex-start;
+
+    /*aparencia:*/
+    border: 1px solid black;
+    margin-bottom: 20px;
+    background-color: lightgray;
+    border-radius: 8px;
+}
+.tb-cell{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin-bottom: 10px;
+
+    width: 100px;
+    /*aparencia:*/
+    border: 1px solid red;
+    border-radius: 8px;
+    padding: 3px;
+}
+.tb-cell-title{
+    margin-right: 10px;
+    font-weight: bold;
+}
+.tb-cell-data{
+    font-weight: normal;
     text-align: center;
 }

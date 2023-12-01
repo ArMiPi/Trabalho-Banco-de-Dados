@@ -8,6 +8,9 @@ public class BaseGoStats {
     private int attack;
 
 
+    public BaseGoStats() {
+    }
+
     public BaseGoStats(int id_stats_go, int id_pokemon, int stamina, int defense, int attack) {
         this.id_stats_go = id_stats_go;
         this.id_pokemon = id_pokemon;

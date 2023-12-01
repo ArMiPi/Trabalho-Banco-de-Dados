@@ -4,6 +4,10 @@ public class PokeClass {
     private int idClass;
     private String type;
 
+
+    public  PokeClass() {
+    }
+
     public PokeClass(int idClass, String type) {
         this.idClass = idClass;
         this.type = type;

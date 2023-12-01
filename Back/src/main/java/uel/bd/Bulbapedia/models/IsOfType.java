@@ -4,6 +4,10 @@ public class IsOfType {
     private int id_pokemon;
     private int id_type;
 
+
+    public IsOfType() {
+    }
+
     public IsOfType(int id_pokemon, int id_type) {
         this.id_pokemon = id_pokemon;
         this.id_type = id_type;

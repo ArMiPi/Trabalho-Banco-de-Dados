@@ -5,6 +5,9 @@ public class Ability {
     private String name;
 
 
+    public Ability() {
+    }
+
     public Ability(int idAbility, String name) {
         this.idAbility = idAbility;
         this.name = name;

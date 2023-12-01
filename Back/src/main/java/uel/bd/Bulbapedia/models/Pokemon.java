@@ -11,6 +11,7 @@ public class Pokemon {
     private int idGeneration;
     private Integer evolvesFrom;
 
+
     public Pokemon() {
     }
 

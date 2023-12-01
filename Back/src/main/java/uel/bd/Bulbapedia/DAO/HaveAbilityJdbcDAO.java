@@ -34,6 +34,13 @@ public class HaveAbilityJdbcDAO implements DAO<HaveAbility>{
                 SELECT * FROM have_ability
                 WHERE id_pokemon = ? AND id_ability = ?
             """;
+
+    private static final String SELECT_BY_POKEMON_QUERY =
+            """
+                SELECT * FROM have_ability
+                WHERE id_pokemon = ?
+            """;
+
     private static final String SELECT_QUERY_ALL =
             """
                 SELECT * FROM have_ability
@@ -62,6 +69,16 @@ public class HaveAbilityJdbcDAO implements DAO<HaveAbility>{
                     SELECT_QUERY, BeanPropertyRowMapper.newInstance(HaveAbility.class), haveAbility.getId_pokemon(),
                     haveAbility.getId_ability());
         } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public List<HaveAbility> getByPokemon(Object key) {
+        try {
+            return template.query(
+                    SELECT_BY_POKEMON_QUERY, BeanPropertyRowMapper.newInstance(HaveAbility.class), key
+            );
+        } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

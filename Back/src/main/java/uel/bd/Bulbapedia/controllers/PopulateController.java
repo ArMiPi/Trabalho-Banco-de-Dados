@@ -21,6 +21,15 @@ public class PopulateController {
     HaveAbilityController haveAbilityController;
 
     @Autowired
+    PokemonGoController pokemonGoController;
+
+    @Autowired
+    ShinyController shinyController;
+
+    @Autowired
+    BaseGoStatsController baseGoStatsController;
+
+    @Autowired
     TypeController typeController;
 
     @Autowired
@@ -32,34 +41,71 @@ public class PopulateController {
     @Autowired
     MoveController moveController;
 
-    @PostMapping("/")
+    @Autowired
+    LearnMoveController learnMoveController;
+
+    @Autowired
+    TypeRelationsController typeRelationsController;
+
+    @Autowired
+    IsOfTypeController isOfTypeController;
+
+    @PostMapping("")
     public void populate() {
+        System.out.print("Populating generation...      ");
         generationController.populateGeneration();
+        System.out.println("Done");
 
+        System.out.print("Populating pokemon...      ");
         pokemonController.populatePokemon();
+        System.out.println("Done");
 
+        System.out.print("Populating ability...      ");
         abilityController.populateAbility();
+        System.out.println("Done");
 
+        System.out.print("Populating have_ability...      ");
         haveAbilityController.populateHaveAbility();
+        System.out.println("Done");
 
-        // Populate pokemon_go
+        System.out.print("Populating pokemon_go...      ");
+        pokemonGoController.populatePokemonGo();
+        System.out.println("Done");
 
-        // Populate shiny
+        System.out.print("Populating shiny...      ");
+        shinyController.populateShiny();
+        System.out.println("Done");
 
-        // Populate base_go_stats
+        System.out.print("Populating base_go_stats...      ");
+        baseGoStatsController.populateBaseGoStats();
+        System.out.println("Done");
 
+        System.out.print("Populating type...      ");
         typeController.populateType();
+        System.out.println("Done");
 
+        System.out.print("Populating base_stats...      ");
         baseStatsController.populateBaseStats();
+        System.out.println("Done");
 
+        System.out.print("Populating class...      ");
         pokeClassController.populatePokeClass();
+        System.out.println("Done");
 
+        System.out.print("Populating move...      ");
         moveController.populateMove();
+        System.out.println("Done");
 
-        // Populate learn_move
+        System.out.print("Populating learn_move...      ");
+        learnMoveController.populateLearnMove();
+        System.out.println("Done");
 
-        // Populate type_relations
+        System.out.print("Populating type_relations...      ");
+        typeRelationsController.populateTypeRelations();
+        System.out.println("Done");
 
-        // Populate is_of_type
+        System.out.print("Populating is_of_type...      ");
+        isOfTypeController.populateIsOfType();
+        System.out.println("Done");
     }
 }

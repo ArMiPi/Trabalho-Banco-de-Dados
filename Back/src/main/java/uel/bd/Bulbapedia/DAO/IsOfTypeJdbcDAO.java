@@ -33,6 +33,11 @@ public class IsOfTypeJdbcDAO implements DAO<IsOfType> {
                 SELECT * FROM is_of_type
                 WHERE id_pokemon = ? AND id_type = ?
             """;
+    private static final String SELECT_BY_POKEMON_QUERY =
+            """
+                SELECT * FROM is_of_type
+                WHERE id_pokemon = ?        
+            """;
     private static final String SELECT_QUERY_ALL =
             """
                 SELECT * FROM is_of_type
@@ -54,6 +59,15 @@ public class IsOfTypeJdbcDAO implements DAO<IsOfType> {
             return template.queryForObject(
                     SELECT_QUERY, BeanPropertyRowMapper.newInstance(IsOfType.class), ofType.getId_pokemon(),
                     ofType.getId_type());
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public List<IsOfType> getByPokemon(Object key) {
+        try {
+            return template.query(
+                    SELECT_BY_POKEMON_QUERY, BeanPropertyRowMapper.newInstance(IsOfType.class), key);
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

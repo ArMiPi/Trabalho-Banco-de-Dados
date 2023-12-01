@@ -6,6 +6,9 @@ public class TypeRelations {
     private float multiplier;
 
 
+    public TypeRelations() {
+    }
+
     public TypeRelations(int id_attacker, int id_defender, float multiplier) {
         this.id_attacker = id_attacker;
         this.id_defender = id_defender;

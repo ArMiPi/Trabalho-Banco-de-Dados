@@ -9,6 +9,9 @@ public class Shiny {
     private String sprite;
 
 
+    public Shiny() {
+    }
+
     public Shiny(int id_shiny, int id_pokemon, int egg, int raid, int wild, String sprite) {
         this.id_shiny = id_shiny;
         this.id_pokemon = id_pokemon;

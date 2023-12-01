@@ -6,6 +6,12 @@ public class HaveAbility {
     private int is_hidden;
 
 
+    public HaveAbility() {
+        this.id_pokemon = 0;
+        this.id_ability = 0;
+        this.is_hidden = 0;
+    }
+
     public HaveAbility(int id_pokemon, int id_ability, int is_hidden) {
         this.id_pokemon = id_pokemon;
         this.id_ability = id_ability;

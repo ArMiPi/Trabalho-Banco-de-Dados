@@ -6,6 +6,9 @@ public class Generation {
     private String region;
 
 
+    public Generation() {
+    }
+
     public Generation(int idGeneration, int genNumber, String region) {
         this.idGeneration = idGeneration;
         this.genNumber = genNumber;

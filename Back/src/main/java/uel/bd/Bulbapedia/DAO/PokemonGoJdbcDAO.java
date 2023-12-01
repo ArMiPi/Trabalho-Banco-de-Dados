@@ -35,6 +35,11 @@ public class PokemonGoJdbcDAO implements DAO<PokemonGo>{
                 SELECT * FROM pokemon_go
                 WHERE id_pokemon_go = ?
             """;
+    private static final String SELECT_BY_POKEDEX_ID_QUERY =
+            """
+                SELECT * FROM pokemon_go
+                WHERE id_pokemon = ?  
+            """;
     private static final String SELECT_QUERY_ALL =
             """
                 SELECT * FROM id_pokemon_go
@@ -57,7 +62,8 @@ public class PokemonGoJdbcDAO implements DAO<PokemonGo>{
         try {
             return template.update(
                     INSERT_QUERY, pokemon.getId_pokemon_go(), pokemon.getId_pokemon(), pokemon.getRaid_exclusive(),
-                    pokemon.getMax_cp(), pokemon.getBuddy_distance(), pokemon.getCandy_to_evolve());
+                    pokemon.getMax_cp(), pokemon.getBuddy_distance(), pokemon.getCandy_to_evolve()
+            );
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -66,7 +72,18 @@ public class PokemonGoJdbcDAO implements DAO<PokemonGo>{
     public PokemonGo get(Object id_pokemon_go) {
         try {
             return template.queryForObject(
-                    SELECT_QUERY, BeanPropertyRowMapper.newInstance(PokemonGo.class), id_pokemon_go);
+                    SELECT_QUERY, BeanPropertyRowMapper.newInstance(PokemonGo.class), id_pokemon_go
+            );
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public PokemonGo getByPokedexId(Object id_pokedex) {
+        try {
+            return template.queryForObject(
+                    SELECT_BY_POKEDEX_ID_QUERY, BeanPropertyRowMapper.newInstance(PokemonGo.class), id_pokedex
+            );
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

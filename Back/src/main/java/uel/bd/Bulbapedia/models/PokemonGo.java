@@ -8,6 +8,7 @@ public class PokemonGo {
     private int buddy_distance;
     private int candy_to_evolve;
 
+
     public PokemonGo() {
         this.id_pokemon_go = 0;
         this.id_pokemon = 0;

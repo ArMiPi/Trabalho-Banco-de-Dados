@@ -11,6 +11,9 @@ public class BaseStats {
     private int speed;
 
 
+    public BaseStats() {
+    }
+
     public BaseStats(int idStats, int idPokemon, int hp, int attack, int defense, int spAttack, int spDefense, int speed) {
         this.idStats = idStats;
         this.idPokemon = idPokemon;

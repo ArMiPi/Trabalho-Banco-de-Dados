@@ -34,6 +34,11 @@ public class ShinyJdbcDAO implements DAO<Shiny>{
                 SELECT * FROM shiny
                 WHERE id_shiny = ?
             """;
+    private static final String SELECT_BY_POKEMON_QUERY =
+            """
+                SELECT * FROM shiny
+                WHERE id_pokemon = ? 
+            """;
     private static final String SELECT_QUERY_ALL =
             """
                 SELECT * FROM shiny
@@ -65,6 +70,16 @@ public class ShinyJdbcDAO implements DAO<Shiny>{
     public Shiny get(Object id_shiny) {
         try {
             return template.queryForObject(SELECT_QUERY, BeanPropertyRowMapper.newInstance(Shiny.class), id_shiny);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public Shiny getByPokemon(Object id_pokemon) {
+        try {
+            return template.queryForObject(
+                    SELECT_BY_POKEMON_QUERY, BeanPropertyRowMapper.newInstance(Shiny.class), id_pokemon
+            );
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

@@ -4,6 +4,10 @@ public class LearnMove {
     private int id_pokemon;
     private int id_move;
 
+
+    public LearnMove() {
+    }
+
     public LearnMove(int id_pokemon, int id_move) {
         this.id_pokemon = id_pokemon;
         this.id_move = id_move;

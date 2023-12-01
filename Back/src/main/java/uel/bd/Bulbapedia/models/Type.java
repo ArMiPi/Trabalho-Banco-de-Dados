@@ -4,6 +4,10 @@ public class Type {
     private int idType;
     private String name;
 
+
+    public Type() {
+    }
+
     public Type(int idType, String name) {
         this.idType = idType;
         this.name = name;

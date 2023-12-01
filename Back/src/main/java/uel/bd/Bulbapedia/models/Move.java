@@ -9,6 +9,10 @@ public class Move {
     private int pp;
     private int idType;
 
+
+    public Move() {
+    }
+
     public Move(int idMove, String name, int accuracy, int idClass, int power, int pp, int idType) {
         this.idMove = idMove;
         this.name = name;

@@ -40,6 +40,13 @@ public class BaseStatsJdbcDAO implements DAO<BaseStats>{
             """
                 SELECT * FROM base_stats
             """;
+
+    private static final String SELECT_BY_POKEMON_QUERY =
+            """
+                SELECT * FROM base_stats
+                WHERE id_pokemon = ?
+            """;
+
     private static final String UPDATE_QUERY =
             """
                 UPDATE base_stats SET
@@ -70,6 +77,16 @@ public class BaseStatsJdbcDAO implements DAO<BaseStats>{
     public BaseStats get(Object id_stats) {
         try {
             return template.queryForObject(SELECT_QUERY, BeanPropertyRowMapper.newInstance(BaseStats.class), id_stats);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public BaseStats getByPokemon(Object id_pokemon) {
+        try {
+            return template.queryForObject(
+                    SELECT_BY_POKEMON_QUERY, BeanPropertyRowMapper.newInstance(BaseStats.class), id_pokemon
+            );
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

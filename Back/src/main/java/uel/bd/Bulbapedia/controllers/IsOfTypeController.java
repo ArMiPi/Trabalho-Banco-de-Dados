@@ -51,6 +51,11 @@ public class IsOfTypeController {
                     }
 
                 }
+                if(generalInfo.get("next") == null) {
+                    break;
+                } else {
+                    generalInfo = APIRequests.getAPIResponse((String) generalInfo.get("next"));
+                }
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());

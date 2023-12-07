@@ -27,15 +27,27 @@ public class IsOfTypeController {
 
                     JSONObject pokemon = APIRequests.getAPIResponse((String) result.get("url"));
                     if(pokemon == null) continue;
-                    int pokemon_id = APIRequests.getIDFromURL((String) result.get("url"));
+                    int pokemon_id = ((Long) pokemon.get("id")).intValue();
 
                     JSONArray types = (JSONArray) pokemon.get("types");
                     for(Object type: types){
-                        JSONObject t = (JSONObject) ((JSONObject) type).get("type");
-                        isOfTypeJdbcDAO.create(new IsOfType(
-                                pokemon_id,
-                                APIRequests.getIDFromURL((String) t.get("url"))
-                        ));
+                        JSONObject tp = (JSONObject) type;
+                        JSONObject t = (JSONObject) tp.get("type");
+                        try {
+                            isOfTypeJdbcDAO.create(new IsOfType(
+                                    pokemon_id,
+                                    APIRequests.getIDFromURL((String) t.get("url")),
+                                    ((Long) tp.get("slot")).intValue()
+                            ));
+                        } catch (Exception e) {
+                            if(pokemon_id > 10000) {
+                                System.out.println("pokemon = " + pokemon_id + " type = " +
+                                        APIRequests.getIDFromURL((String) t.get("url"))
+                                        + " slot = " + tp.get("slot"));
+                            } else {
+                                System.out.println(e.getMessage());
+                            }
+                        }
                     }
 
                 }

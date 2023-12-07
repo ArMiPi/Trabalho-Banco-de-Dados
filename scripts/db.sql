@@ -184,5 +184,8 @@ CREATE TABLE type_relations (
 CREATE TABLE is_of_type (
     id_pokemon INT,
     id_type INT,
-    CONSTRAINT pk_is_of_type PRIMARY KEY(id_pokemon, id_type)
+    slot INT,
+    CONSTRAINT pk_is_of_type PRIMARY KEY(id_pokemon, id_type),
+    CONSTRAINT unique_slot UNIQUE(id_pokemon, slot),
+	CONSTRAINT valid_slot CHECK(slot > 0)
 );

@@ -10,6 +10,7 @@ import uel.bd.Bulbapedia.utils.APIRequests;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "http://localhost:3000") //serve para O react se comunicar corretamente com o Spring
@@ -212,5 +213,19 @@ public class PokemonController {
         json.put("pokemon_go_info", goInfo);
 
         return json;
+    }
+
+    @GetMapping("/teste/{id}")
+    public Map<String, Object> getPokemonTest(@PathVariable int id) {
+        Map<String, Object> teste = null;
+        try {
+            teste = pokemonJdbcDAO.getTest(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("oi");
+
+        return teste;
     }
 }

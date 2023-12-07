@@ -26,69 +26,70 @@ public class TypeRelationsController {
                 JSONObject result = (JSONObject) obj;
 
                 JSONObject type = APIRequests.getAPIResponse((String) result.get("url"));
-                int type_id = APIRequests.getIDFromURL((String) result.get("url"));
+                if(type == null) continue;
+
+                int type_id = ((Long) type.get("id")).intValue();
                 JSONObject damage_relations = (JSONObject) type.get("damage_relations");
-                JSONArray double_damage_from = (JSONArray) damage_relations.get("double_damage_from");
-                for(Object dr: double_damage_from){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            type_id,
-                            2.0F
-                    ));
-                }
-                JSONArray half_damage_from = (JSONArray) damage_relations.get("half_damage_from");
-                for(Object dr: half_damage_from){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            type_id,
-                            0.5F
-                    ));
-                }
-                JSONArray no_damage_from = (JSONArray) damage_relations.get("no_damage_from");
-                for(Object dr: no_damage_from){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            type_id,
-                            0.0F
-                    ));
-                }
-                JSONArray double_damage_to = (JSONArray) damage_relations.get("double_damage_to");
-                for(Object dr: double_damage_to){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            type_id,
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            2.0F
-                    ));
-                }
-                JSONArray half_damage_to = (JSONArray) damage_relations.get("half_damage_to");
-                for(Object dr: half_damage_to){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            type_id,
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            0.5F
-                    ));
-                }
-                JSONArray no_damage_to = (JSONArray) damage_relations.get("no_damage_to");
-                for(Object dr: no_damage_to){
-                    JSONObject d = (JSONObject) dr;
-                    typeRelationsJdbcDAO.create(new TypeRelations(
-                            type_id,
-                            APIRequests.getIDFromURL((String) d.get("url")),
-                            0.0F
-                    ));
-                }
 
-
-
-
-
+                try {
+                    JSONArray double_damage_from = (JSONArray) damage_relations.get("double_damage_from");
+                    for (Object dr : double_damage_from) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                type_id,
+                                2.0F
+                        ));
+                    }
+                    JSONArray half_damage_from = (JSONArray) damage_relations.get("half_damage_from");
+                    for (Object dr : half_damage_from) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                type_id,
+                                0.5F
+                        ));
+                    }
+                    JSONArray no_damage_from = (JSONArray) damage_relations.get("no_damage_from");
+                    for (Object dr : no_damage_from) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                type_id,
+                                0.0F
+                        ));
+                    }
+                    JSONArray double_damage_to = (JSONArray) damage_relations.get("double_damage_to");
+                    for (Object dr : double_damage_to) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                type_id,
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                2.0F
+                        ));
+                    }
+                    JSONArray half_damage_to = (JSONArray) damage_relations.get("half_damage_to");
+                    for (Object dr : half_damage_to) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                type_id,
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                0.5F
+                        ));
+                    }
+                    JSONArray no_damage_to = (JSONArray) damage_relations.get("no_damage_to");
+                    for (Object dr : no_damage_to) {
+                        JSONObject d = (JSONObject) dr;
+                        typeRelationsJdbcDAO.create(new TypeRelations(
+                                type_id,
+                                APIRequests.getIDFromURL((String) d.get("url")),
+                                0.0F
+                        ));
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
              }
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

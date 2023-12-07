@@ -20,8 +20,8 @@ public class IsOfTypeJdbcDAO implements DAO<IsOfType> {
 
     private static final String INSERT_QUERY =
             """
-                INSERT INTO is_of_type(id_pokemon, id_type)
-                VALUES (?, ?)
+                INSERT INTO is_of_type(id_pokemon, id_type, slot)
+                VALUES (?, ?, ?)
             """;
     private static final String DELETE_QUERY =
             """
@@ -47,7 +47,7 @@ public class IsOfTypeJdbcDAO implements DAO<IsOfType> {
 
     public int create(IsOfType ofType) {
         try {
-            return template.update(INSERT_QUERY, ofType.getId_pokemon(), ofType.getId_type());
+            return template.update(INSERT_QUERY, ofType.getId_pokemon(), ofType.getId_type(), ofType.getSlot());
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

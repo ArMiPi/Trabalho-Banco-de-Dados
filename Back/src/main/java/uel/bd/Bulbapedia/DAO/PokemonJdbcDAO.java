@@ -1,5 +1,6 @@
 package uel.bd.Bulbapedia.DAO;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uel.bd.Bulbapedia.models.Pokemon;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -40,6 +42,22 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
             """
                 SELECT * FROM pokemon
             """;
+
+    private static final String GET_POKEMON_GENERAL_DATA =
+            """
+                    SELECT
+                    pk.*,
+                    bs.hp, bs.attack, bs.defense, bs.sp_attack, bs.sp_defense, bs.speed,
+                    pk_go.raid_exclusive, pk_go.max_cp, pk_go.buddy_distance, pk_go.candy_to_evolve,
+                    bs_go.stamina AS go_stamina, bs_go.defense AS go_defense, bs_go.attack AS go_attack,
+                    shiny.egg, shiny.raid, shiny.wild, shiny.sprite
+                    FROM pokemon AS pk
+                    LEFT JOIN base_stats AS bs ON pk.id_pokedex = bs.id_pokemon
+                    LEFT JOIN pokemon_go AS pk_go ON pk.id_pokedex = pk_go.id_pokemon
+                    LEFT JOIN base_go_stats AS bs_go ON pk.id_pokedex = bs_go.id_pokemon
+                    LEFT JOIN shiny ON pk.id_pokedex = shiny.id_pokemon
+                    WHERE id_pokedex = ?    
+                    """;
     private static final String UPDATE_QUERY =
             """
                 UPDATE pokemon SET
@@ -78,6 +96,14 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
         try {
             return template.queryForObject(SELECT_QUERY, BeanPropertyRowMapper.newInstance(Pokemon.class), id_pokedex);
         } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public Map<String, Object> getTest(Object id_pokedex) {
+        try {
+            return template.queryForMap(GET_POKEMON_GENERAL_DATA, id_pokedex);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

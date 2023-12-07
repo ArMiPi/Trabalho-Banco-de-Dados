@@ -20,21 +20,28 @@ public class LearnMoveController {
     @PostMapping("/populate")
     public void populateLearnMove() {
         try {
-            JSONObject generalInfo = APIRequests.getAPIResponse("https://pokeapi.co/api/v2/pokemon");
+            JSONObject generalInfo = APIRequests.getAPIResponse("https://pokeapi.co/api/v2/move");
 
             while(true){
                 for(Object obj: (JSONArray) generalInfo.get("results")){
                     JSONObject result = (JSONObject) obj;
 
-                    JSONObject pokemon = APIRequests.getAPIResponse((String) result.get("url"));
-                    int pokemon_id = APIRequests.getIDFromURL((String) result.get("url"));
+                    JSONObject move = APIRequests.getAPIResponse((String) result.get("url"));
+                    if(move == null) continue;
 
-                    JSONArray moves = (JSONArray) pokemon.get("moves");
-                    for(Object move: moves){
-                        JSONObject m = (JSONObject) ((JSONObject) move).get("move");
-                        learnMoveJdbcDAO.create(new LearnMove(
-                                pokemon_id,
-                                APIRequests.getIDFromURL((String) m.get("url"))));
+                    int move_id = ((Long) move.get("id")).intValue();
+
+                    JSONArray pokemons = (JSONArray) move.get("learned_by_pokemon");
+                    for(Object pokemon: pokemons){
+                        JSONObject pk = (JSONObject) pokemon;
+                        try {
+                            learnMoveJdbcDAO.create(new LearnMove(
+                                    APIRequests.getIDFromURL((String) pk.get("url")),
+                                    move_id));
+                        } catch (Exception e) {
+                            System.out.println("Pokemon = "+pk.get("url")
+                                                    + " Move = "+move_id);
+                        }
                     }
 
                 }

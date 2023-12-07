@@ -122,6 +122,22 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
                 LIMIT 10;
             """;
 
+    private static final String RANKING_BY_GO_STATS =
+            """
+                SELECT
+                    bs_go.id_pokemon, pk.name,
+                	(
+                		SELECT AVG(c)
+                		FROM (
+                			VALUES (bs_go.stamina), (bs_go.defense), (bs_go.attack)
+                		) AS T(c)
+                	) AS average
+                FROM base_go_stats AS bs_go
+                JOIN pokemon AS pk ON bs_go.id_pokemon = pk.id_pokedex
+                ORDER BY average DESC
+                LIMIT 10;
+            """;
+
 
     public PokemonJdbcDAO(JdbcTemplate template) {
         this.template = template;
@@ -190,6 +206,14 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
     public List<Map<String, Object>> getPokemonRankingByStatsNormalOnly() {
         try {
             return template.queryForList(RANKING_BY_STATS_NORMAL_ONLY);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getPokemonRankingByGoStats() {
+        try {
+            return template.queryForList(RANKING_BY_GO_STATS);
         } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

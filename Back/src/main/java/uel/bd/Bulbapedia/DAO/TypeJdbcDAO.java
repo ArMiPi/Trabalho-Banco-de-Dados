@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uel.bd.Bulbapedia.models.Type;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -43,6 +44,14 @@ public class TypeJdbcDAO implements DAO<Type>{
     private static final String UPDATE_QUERY =
             """
                 UPDATE type SET name = ? WHERE id_type = ?
+            """;
+
+    private static final String POKEMON_DISTRIBUTION =
+            """
+                    SELECT DISTINCT type.name, COUNT(id_pokemon)
+                    FROM is_of_type AS iot
+                    JOIN type ON iot.id_type = type.id_type
+                    GROUP BY type.name
             """;
 
 
@@ -76,6 +85,14 @@ public class TypeJdbcDAO implements DAO<Type>{
         try {
             return template.update(UPDATE_QUERY, type.getName(), type.getIdType());
         } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getPokemonDistribution() {
+        try {
+            return template.queryForList(POKEMON_DISTRIBUTION);
+        } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

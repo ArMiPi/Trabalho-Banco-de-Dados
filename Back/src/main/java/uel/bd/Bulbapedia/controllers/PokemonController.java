@@ -211,4 +211,9 @@ public class PokemonController {
     public List<Map<String, Object>> getPokemonRankingNormalOnly() {
         return pokemonJdbcDAO.getPokemonRankingByStatsNormalOnly();
     }
+
+    @GetMapping("/ranking/go_stats")
+    public List<Map<String, Object>> getPokemonRankingGoStats() {
+        return pokemonJdbcDAO.getPokemonRankingByGoStats();
+    }
 }

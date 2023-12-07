@@ -97,5 +97,6 @@ type_relations (
 
 is_of_type (
     id_pokemon = Tabela pokemon,
-    id_type = pokeapi/pokeapi/{id_pokemon}/"types" && Tabela type,
+    id_type = pokeapi/{id_pokemon}/"types" && Tabela type,
+    slot = pokeapi/{id_pokemon}/"types"/"slot"
 )

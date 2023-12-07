@@ -17,22 +17,6 @@ import java.util.*;
 public class PokemonController {
     @Autowired
     private PokemonJdbcDAO pokemonJdbcDAO;
-    @Autowired
-    private BaseStatsJdbcDAO baseStatsJdbcDAO;
-    @Autowired
-    private AbilityJdbcDAO abilityJdbcDAO;
-    @Autowired
-    private HaveAbilityJdbcDAO haveAbilityJdbcDAO;
-    @Autowired
-    private IsOfTypeJdbcDAO isOfTypeJdbcDAO;
-    @Autowired
-    private TypeJdbcDAO typeJdbcDAO;
-    @Autowired
-    private PokemonGoJdbcDAO pokemonGoJdbcDAO;
-    @Autowired
-    private BaseGoStatsJdbcDAO baseGoStatsJdbcDAO;
-    @Autowired
-    private ShinyJdbcDAO shinyJdbcDAO;
 
 
     @PostMapping("/populate")
@@ -216,5 +200,15 @@ public class PokemonController {
         pokemon_data.put("status", status);
 
         return pokemon_data;
+    }
+
+    @GetMapping("/ranking/")
+    public List<Map<String, Object>> getPokemonRanking() {
+        return pokemonJdbcDAO.getPokemonRankingByStats();
+    }
+
+    @GetMapping("/ranking/normal")
+    public List<Map<String, Object>> getPokemonRankingNormalOnly() {
+        return pokemonJdbcDAO.getPokemonRankingByStatsNormalOnly();
     }
 }

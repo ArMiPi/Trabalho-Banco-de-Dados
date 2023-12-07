@@ -89,6 +89,39 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
                 UPDATE pokemon SET evolves_from = ? WHERE id_pokedex = ?
             """;
 
+    private static final String RANKING_BY_STATS =
+            """
+                SELECT
+                    id_pokemon, pokemon.name,
+                    (
+                    	SELECT AVG(c)
+                    	FROM (
+                    		VALUES (hp), (attack), (defense), (sp_attack), (sp_defense), (speed)
+                    	) AS T(c)
+                    ) AS Average
+                FROM base_stats
+                LEFT JOIN pokemon ON id_pokemon = id_pokedex
+                ORDER BY average DESC
+                LIMIT 10;
+            """;
+
+    private static final String RANKING_BY_STATS_NORMAL_ONLY =
+            """
+                SELECT
+                    id_pokemon, pokemon.name,
+                    (
+                    	SELECT AVG(c)
+                    	FROM (
+                    		VALUES (hp), (attack), (defense), (sp_attack), (sp_defense), (speed)
+                    	) AS T(c)
+                    ) AS Average
+                FROM base_stats
+                LEFT JOIN pokemon ON id_pokemon = id_pokedex
+                WHERE rarity = 'N'
+                ORDER BY average DESC
+                LIMIT 10;
+            """;
+
 
     public PokemonJdbcDAO(JdbcTemplate template) {
         this.template = template;
@@ -142,6 +175,22 @@ public class PokemonJdbcDAO implements DAO<Pokemon>{
         try {
             return template.update(UPDATE_EVOLUTION, update, id_pokedex);
         } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getPokemonRankingByStats() {
+        try {
+            return template.queryForList(RANKING_BY_STATS);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getPokemonRankingByStatsNormalOnly() {
+        try {
+            return template.queryForList(RANKING_BY_STATS_NORMAL_ONLY);
+        } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

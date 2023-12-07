@@ -92,5 +92,5 @@ VALUES
 
 INSERT INTO is_of_type(id_pokemon, id_type)
 VALUES
-    (1, 12),
-    (1, 4);
+    (1, 12, 1),
+    (1, 4, 2);

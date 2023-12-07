@@ -169,9 +169,9 @@ public class PokemonController {
         // -- Pokemon GO shiny data
         JSONObject shiny = new JSONObject();
 
-        shiny.put("egg", (int) pokemon_main_data.get("egg") == 1);
-        shiny.put("wild", (int) pokemon_main_data.get("wild") == 1);
-        shiny.put("raid", (int) pokemon_main_data.get("raid") == 1);
+        shiny.put("egg", pokemon_main_data.get("egg") != null && (int) pokemon_main_data.get("egg") == 1);
+        shiny.put("wild", pokemon_main_data.get("wild") != null && (int) pokemon_main_data.get("egg") == 1);
+        shiny.put("raid", pokemon_main_data.get("raid") != null && (int) pokemon_main_data.get("egg") == 1);
         shiny.put("sprite", pokemon_main_data.get("sprite_shiny"));
 
         pokemon_go_data.put("shiny", shiny);

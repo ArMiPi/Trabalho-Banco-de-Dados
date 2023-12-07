@@ -42,10 +42,14 @@ public class HaveAbilityController {
                                 is_hidden
                             ));
                         } catch (Exception e) {
-                            System.out.println(
-                                    "Não foi possível inserir valores para id_pokedex = " +
-                                            APIRequests.getIDFromURL((String) pkmn.get("url")) +
-                                    " e id_ability = " + id);
+                            if(APIRequests.getIDFromURL((String) pkmn.get("url")) < 10000) {
+                                System.out.println(e.getMessage());
+                            } else {
+                                System.out.println(
+                                        "Não foi possível inserir valores para id_pokedex = " +
+                                                APIRequests.getIDFromURL((String) pkmn.get("url")) +
+                                                " e id_ability = " + id);
+                            }
                         }
                     }
                 }

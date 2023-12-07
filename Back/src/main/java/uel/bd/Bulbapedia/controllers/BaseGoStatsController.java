@@ -3,6 +3,7 @@ package uel.bd.Bulbapedia.controllers;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uel.bd.Bulbapedia.DAO.BaseGoStatsJdbcDAO;
@@ -15,6 +16,7 @@ public class BaseGoStatsController {
     @Autowired
     public BaseGoStatsJdbcDAO baseGoStatsJdbcDAO;
 
+    @PostMapping("/populate")
     public void populateBaseGoStats() {
         try {
             JSONArray stats =

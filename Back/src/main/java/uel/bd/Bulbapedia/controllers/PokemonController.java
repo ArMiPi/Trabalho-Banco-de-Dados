@@ -8,9 +8,7 @@ import uel.bd.Bulbapedia.DAO.*;
 import uel.bd.Bulbapedia.models.*;
 import uel.bd.Bulbapedia.utils.APIRequests;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @CrossOrigin(origins = "http://localhost:3000") //serve para O react se comunicar corretamente com o Spring
@@ -115,117 +113,108 @@ public class PokemonController {
 
     @GetMapping("/{id}")
     public JSONObject getPokemon(@PathVariable int id) {
-        JSONObject json = new JSONObject();
-
-        // Dados gerais do Pokémon
-        Pokemon pokemonData = pokemonJdbcDAO.get(id);
-
-        json.put("id", pokemonData.getIdPokedex());
-        json.put("name", pokemonData.getName());
-        json.put("height", pokemonData.getHeight());
-        json.put("weight", pokemonData.getWeight());
-        json.put("capture_rate", pokemonData.getCaptureRate());
-        json.put("rarity", pokemonData.getRarity());
-        json.put("sprite", pokemonData.getSprite());
-        json.put("generation", pokemonData.getIdGeneration());
-
-        // Status base do Pokémon
-        BaseStats baseStats = baseStatsJdbcDAO.getByPokemon(id);
-        JSONObject status = new JSONObject();
-
-        status.put("base_hp", baseStats.getHp());
-        status.put("base_attack", baseStats.getAttack());
-        status.put("base_defense", baseStats.getDefense());
-        status.put("base_sp_attack", baseStats.getSpAttack());
-        status.put("base_sp_defense", baseStats.getSpDefense());
-        status.put("base_speed", baseStats.getSpeed());
-
-        json.put("status", status);
-
-        // Dados das habilidades do Pokémon
-        List<HaveAbility> abilities = haveAbilityJdbcDAO.getByPokemon(id);
-        JSONArray abilitiesData = new JSONArray();
-        for(HaveAbility ability: abilities) {
-            JSONObject abilityData = new JSONObject();
-
-            abilityData.put("hidden", ability.getIs_hidden() == 1);
-            abilityData.put("name", abilityJdbcDAO.get(ability.getId_ability()).getName());
-
-            abilitiesData.add(abilityData);
-        }
-
-        json.put("abilities", abilitiesData);
-
-        // Informações de tipo
-        List<IsOfType> types = isOfTypeJdbcDAO.getByPokemon(id);
-        List<String> typeNames = new ArrayList<String>();
-        for(IsOfType type: types) {
-            typeNames.add(typeJdbcDAO.get(type.getId_type()).getName());
-        }
-
-        json.put("types", typeNames);
-
-        // Dados Pokémon Go
-        PokemonGo pokemonGoData;
+        List<Map<String, Object>> pokemon_full_data = null;
         try {
-            pokemonGoData = pokemonGoJdbcDAO.getByPokedexId(id);
-        } catch (Exception e) {
-            return json;
-        }
-
-        BaseGoStats baseGoStats = baseGoStatsJdbcDAO.getByPokemon(id);
-
-        Shiny shiny;
-        try {
-            shiny = shinyJdbcDAO.getByPokemon(id);
-        } catch (Exception e) {
-            shiny = null;
-        }
-
-        JSONObject goInfo = new JSONObject();
-
-        goInfo.put("raid_exclusive", pokemonGoData.getRaid_exclusive() == 1);
-        goInfo.put("max_cp", pokemonGoData.getMax_cp());
-        goInfo.put("buddy_distance", pokemonGoData.getBuddy_distance());
-        goInfo.put("candy_to_evolve", pokemonGoData.getCandy_to_evolve());
-
-        // ----------------------------------------------------------------
-        JSONObject goStats = new JSONObject();
-
-        goStats.put("stamina", baseGoStats.getStamina());
-        goStats.put("defense", baseGoStats.getDefense());
-        goStats.put("attack", baseGoStats.getAttack());
-
-        goInfo.put("stats", goStats);
-
-        // ----------------------------------------------------------------
-        if(shiny != null) {
-            JSONObject shinyInfo = new JSONObject();
-
-            shinyInfo.put("egg", shiny.getEgg() == 1);
-            shinyInfo.put("raid", shiny.getRaid() == 1);
-            shinyInfo.put("wild", shiny.getWild() == 1);
-            shinyInfo.put("sprite", shiny.getSprite());
-
-            goInfo.put("shiny", shinyInfo);
-        }
-
-        json.put("pokemon_go_info", goInfo);
-
-        return json;
-    }
-
-    @GetMapping("/teste/{id}")
-    public Map<String, Object> getPokemonTest(@PathVariable int id) {
-        Map<String, Object> teste = null;
-        try {
-            teste = pokemonJdbcDAO.getTest(id);
+            pokemon_full_data = pokemonJdbcDAO.getPokemonGeneralData(id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("oi");
+        Set<List<String>> abilities_data = new HashSet<List<String>>();
+        Set<List<String>> tipos_data = new HashSet<List<String>>();
 
-        return teste;
+        for(Map<String, Object> pokemon: pokemon_full_data) {
+            List<String> lst_ability = new ArrayList<String>();
+            List<String> lst_type = new ArrayList<String>();
+
+            lst_ability.add((String) pokemon.get("ability_name"));
+            lst_ability.add(String.valueOf((int) pokemon.get("is_hidden")));
+
+            lst_type.add((String) pokemon.get("type_name"));
+            lst_type.add(String.valueOf((int) pokemon.get("slot")));
+
+            abilities_data.add(lst_ability);
+            tipos_data.add(lst_type);
+        }
+
+        Map<String, Object> pokemon_main_data = pokemon_full_data.get(0);
+        JSONObject pokemon_data = new JSONObject();
+        // Informação da geração
+        pokemon_data.put("generation", pokemon_main_data.get("id_generation"));
+
+        // Informação das habilidades
+        JSONArray abilities = new JSONArray();
+        for(List<String> ability_info: abilities_data) {
+            JSONObject ability = new JSONObject();
+
+            ability.put("hidden", Integer.parseInt(ability_info.get(1)) == 1);
+            ability.put("name", ability_info.get(0));
+
+            abilities.add(ability);
+        }
+
+        pokemon_data.put("abilities", abilities);
+
+        // Informação dos tipos
+        JSONArray types = new JSONArray();
+        for(List<String> tipos_info: tipos_data) {
+            JSONObject type = new JSONObject();
+
+            type.put("slot", Integer.parseInt(tipos_info.get(1)));
+            type.put("name", tipos_info.get(0));
+
+            types.add(type);
+        }
+
+        pokemon_data.put("types", types);
+
+        // Informações o Pokemon GO
+        JSONObject pokemon_go_data = new JSONObject();
+
+        // -- Pokemon GO stats
+        JSONObject go_stats = new JSONObject();
+
+        go_stats.put("defense", pokemon_main_data.get("go_defense"));
+        go_stats.put("attack", pokemon_main_data.get("go_attack"));
+        go_stats.put("stamina", pokemon_main_data.get("go_stamina"));
+
+        pokemon_go_data.put("stats", go_stats);
+        pokemon_go_data.put("max_cp", pokemon_main_data.get("max_cp"));
+        pokemon_go_data.put("candy_to_evolve", pokemon_main_data.get("candy_to_evolve"));
+
+        // -- Pokemon GO shiny data
+        JSONObject shiny = new JSONObject();
+
+        shiny.put("egg", (int) pokemon_main_data.get("egg") == 1);
+        shiny.put("wild", (int) pokemon_main_data.get("wild") == 1);
+        shiny.put("raid", (int) pokemon_main_data.get("raid") == 1);
+        shiny.put("sprite", pokemon_main_data.get("sprite_shiny"));
+
+        pokemon_go_data.put("shiny", shiny);
+        pokemon_go_data.put("raid_exclusive", (int) pokemon_main_data.get("raid_exclusive") == 1);
+        pokemon_go_data.put("buddy_distance", pokemon_main_data.get("buddy_distance"));
+
+        pokemon_data.put("pokemon_go_info", pokemon_go_data);
+        pokemon_data.put("name", pokemon_main_data.get("name"));
+        pokemon_data.put("sprite", pokemon_main_data.get("sprite"));
+        pokemon_data.put("weight", pokemon_main_data.get("weight"));
+        pokemon_data.put("id", pokemon_main_data.get("id_pokedex"));
+        pokemon_data.put("capture_rate", pokemon_main_data.get("capture_rate"));
+        pokemon_data.put("height", pokemon_main_data.get("height"));
+        pokemon_data.put("rarity", pokemon_main_data.get("rarity"));
+
+        // Pokemon Stats
+        JSONObject status = new JSONObject();
+
+        status.put("base_sp_defense", pokemon_main_data.get("sp_defense"));
+        status.put("base_speed", pokemon_main_data.get("speed"));
+        status.put("base_attack", pokemon_main_data.get("attack"));
+        status.put("base_defense", pokemon_main_data.get("defense"));
+        status.put("base_sp_attack", pokemon_main_data.get("sp_attack"));
+        status.put("base_hp", pokemon_main_data.get("hp"));
+
+        pokemon_data.put("status", status);
+
+        return pokemon_data;
     }
 }

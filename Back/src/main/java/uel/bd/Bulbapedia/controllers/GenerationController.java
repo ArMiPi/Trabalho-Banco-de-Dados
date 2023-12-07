@@ -3,6 +3,7 @@ package uel.bd.Bulbapedia.controllers;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +11,8 @@ import uel.bd.Bulbapedia.DAO.GenerationJdbcDAO;
 import uel.bd.Bulbapedia.models.Generation;
 import uel.bd.Bulbapedia.utils.APIRequests;
 
-import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/generation")
@@ -48,5 +50,10 @@ public class GenerationController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @GetMapping("/pokemon_distribution")
+    public List<Map<String, Object>> getPokemonDistribution() {
+        return generationJdbcDAO.getPokemonDistribution();
     }
 }

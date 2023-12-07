@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uel.bd.Bulbapedia.models.Generation;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -43,6 +44,14 @@ public class GenerationJdbcDAO implements DAO<Generation>{
     private static final String UPDATE_QUERY =
             """
                 UPDATE generation SET region = ? WHERE id_generation = ? 
+            """;
+
+    private static final String POKEMON_DISTRIBUTION =
+            """
+                SELECT pk.id_generation, generation.region, COUNT(pk.id_pokedex)
+                FROM pokemon AS pk
+                LEFT JOIN generation ON pk.id_generation = generation.id_generation
+                GROUP BY pk.id_generation, generation.region
             """;
 
 
@@ -79,6 +88,14 @@ public class GenerationJdbcDAO implements DAO<Generation>{
         try {
             return template.update(UPDATE_QUERY, gen.getRegion(), gen.getIdGeneration());
         } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getPokemonDistribution() {
+        try {
+            return template.queryForList(POKEMON_DISTRIBUTION);
+        } catch (DataAccessException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

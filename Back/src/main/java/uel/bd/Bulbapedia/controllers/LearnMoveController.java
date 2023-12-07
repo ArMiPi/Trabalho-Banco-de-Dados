@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uel.bd.Bulbapedia.DAO.LearnMoveJdbcDAO;
+import uel.bd.Bulbapedia.DAO.PokemonJdbcDAO;
 import uel.bd.Bulbapedia.models.LearnMove;
+import uel.bd.Bulbapedia.models.Pokemon;
 import uel.bd.Bulbapedia.utils.APIRequests;
 
 @RestController
@@ -16,31 +18,39 @@ import uel.bd.Bulbapedia.utils.APIRequests;
 public class LearnMoveController {
     @Autowired
     private LearnMoveJdbcDAO learnMoveJdbcDAO;
+    @Autowired
+    PokemonJdbcDAO pokemonJdbcDAO;
 
     @PostMapping("/populate")
     public void populateLearnMove() {
         try {
-            JSONObject generalInfo = APIRequests.getAPIResponse("https://pokeapi.co/api/v2/move");
+            JSONObject generalInfo = APIRequests.getAPIResponse("https://pokeapi.co/api/v2/pokemon");
 
             while(true){
                 for(Object obj: (JSONArray) generalInfo.get("results")){
                     JSONObject result = (JSONObject) obj;
 
-                    JSONObject move = APIRequests.getAPIResponse((String) result.get("url"));
-                    if(move == null) continue;
+                    JSONObject pokemon = APIRequests.getAPIResponse((String) result.get("url"));
+                    if(pokemon == null) continue;
+                    int pokemon_id = ((Long) pokemon.get("id")).intValue();
 
-                    int move_id = ((Long) move.get("id")).intValue();
+                    try {
+                        Pokemon pk_temp = pokemonJdbcDAO.get(pokemon_id);
+                    } catch (Exception e) {
+                        continue;
+                    }
 
-                    JSONArray pokemons = (JSONArray) move.get("learned_by_pokemon");
-                    for(Object pokemon: pokemons){
-                        JSONObject pk = (JSONObject) pokemon;
+                    JSONArray moves = (JSONArray) pokemon.get("moves");
+                    for(Object move: moves){
+                        JSONObject mv = (JSONObject) move;
+                        JSONObject mv_data = (JSONObject) mv.get("move");
                         try {
                             learnMoveJdbcDAO.create(new LearnMove(
-                                    APIRequests.getIDFromURL((String) pk.get("url")),
-                                    move_id));
+                                    pokemon_id,
+                                    APIRequests.getIDFromURL((String) mv_data.get("url"))));
                         } catch (Exception e) {
-                            System.out.println("Pokemon = "+pk.get("url")
-                                                    + " Move = "+move_id);
+                            System.out.println("Pokemon = "+pokemon_id
+                                                    + " Move = "+mv_data.get("url"));
                         }
                     }
 

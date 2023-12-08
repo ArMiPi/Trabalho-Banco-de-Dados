@@ -125,7 +125,7 @@ public class PokemonController {
         JSONObject pokemon_data = new JSONObject();
         // Informação da geração
         pokemon_data.put("generation", pokemon_main_data.get("id_generation"));
-
+        pokemon_data.put("evolves_from", pokemon_main_data.get("evolves_from"));
         // Informação das habilidades
         JSONArray abilities = new JSONArray();
         for(List<String> ability_info: abilities_data) {

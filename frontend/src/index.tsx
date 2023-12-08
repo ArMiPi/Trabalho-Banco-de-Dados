@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider, useLocation} from "react-router-dom";
 import {PokemonPage} from "./components/PokemonPage.jsx";
+import {GenerationDistro} from "./components/GenerationDistro";
+import Ranking from "./components/Ranking";
+import RankingNormal from "./components/RankingNormal";
 
 const router = createBrowserRouter([
     {
@@ -14,7 +17,20 @@ const router = createBrowserRouter([
     {
         path: '/pokemon/:id',
         element: <PokemonPage/>
+    },
+    {
+        path: '/gen_distro/',
+        element: <GenerationDistro/>
+    },
+    {
+        path: '/ranking/',
+        element: <Ranking/>
+    },
+    {
+        path: '/ranking/normal',
+        element: <RankingNormal/>
     }
+
 
 ]);
 
